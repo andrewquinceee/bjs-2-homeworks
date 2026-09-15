@@ -1,100 +1,36 @@
-function getArrayParams(...arr) {
-  let min = arr[0];
-  let max = arr[0];
-  let sum = 0;
+"use strict";
 
-  for (let i = 0; i < arr.length; i++) {
-    const item = arr[i];
+function solveEquation(a, b, c) {
+  let discriminant = b ** 2 - 4 * a * c;
 
-    if (item > max) {
-      max = item;
-    }
-    if (item < min) {
-      min = item;
-    }
-    sum += item;
+  if (discriminant < 0) {
+    return [];
   }
 
-  const avg = Number((sum / arr.length).toFixed(2));
+  if (discriminant === 0) {
+    let root = -b / (2 * a);
+    return [root];
+  }
 
-  return { min: min, max: max, avg: avg };
+  let root1 = (-b + Math.sqrt(discriminant)) / (2 * a);
+  let root2 = (-b - Math.sqrt(discriminant)) / (2 * a);
+  return [root1, root2];
 }
 
-function summElementsWorker(...arr) {
-  if (arr.length === 0) {
-    return 0;
+function calculateTotalMortgage(percent, contribution, amount, countMonths) {
+  percent = Number(percent);
+  contribution = Number(contribution);
+  amount = Number(amount);
+  countMonths = Number(countMonths);
+
+  if (isNaN(percent) || isNaN(contribution) || isNaN(amount) || isNaN(countMonths)) {
+    return false;
   }
 
-  let sum = 0;
-  for (let i = 0; i < arr.length; i++) {
-    sum += arr[i];
-  }
+  let monthlyPercent = percent / 100 / 12;
+  let body = amount - contribution;
+  let monthlyPayment = body * (monthlyPercent + (monthlyPercent / (((1 + monthlyPercent) ** countMonths) - 1)));
+  let total = monthlyPayment * countMonths;
 
-  return sum;
-}
-
-function differenceMaxMinWorker(...arr) {
-  if (arr.length === 0) {
-    return 0;
-  }
-
-  const max = Math.max(...arr);
-  const min = Math.min(...arr);
-
-  return max - min;
-}
-
-function differenceEvenOddWorker(...arr) {
-  if (arr.length === 0) {
-    return 0;
-  }
-
-  let sumEvenElement = 0;
-  let sumOddElement = 0;
-
-  for (let i = 0; i < arr.length; i++) {
-    const item = arr[i];
-
-    if (item % 2 === 0) {
-      sumEvenElement += item;
-    } else {
-      sumOddElement += item;
-    }
-  }
-
-  return sumEvenElement - sumOddElement;
-}
-
-function averageEvenElementsWorker(...arr) {
-  if (arr.length === 0) {
-    return 0;
-  }
-
-  let sumEvenElement = 0;
-  let countEvenElement = 0;
-
-  for (let i = 0; i < arr.length; i++) {
-    const item = arr[i];
-
-    if (item % 2 === 0) {
-      sumEvenElement += item;
-      countEvenElement += 1;
-    }
-  }
-
-  return sumEvenElement / countEvenElement;
-}
-
-function makeWork(arrOfArr, func) {
-  let maxWorkerResult = func(...arrOfArr[0]);
-
-  for (let i = 1; i < arrOfArr.length; i++) {
-    const result = func(...arrOfArr[i]);
-
-    if (result > maxWorkerResult) {
-      maxWorkerResult = result;
-    }
-  }
-
-  return maxWorkerResult;
+  return Math.round(total * 100) / 100;
 }
